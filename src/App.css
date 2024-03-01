@@ -1,0 +1,80 @@
+
+.message {
+
+  color: white;
+}
+
+.title {
+  color: white;
+}
+
+.card {
+  padding: 2em;
+}
+
+
+
+
+
+
+
+ .cloud {
+  width: 85px;
+  margin: 0;
+  padding: 0 0 1px 0;
+  position: absolute;
+  top: 0.5%;
+  right: 1%;
+}
+
+
+
+
+.weather--icon {
+  display: flex;
+  justify-content: center;
+}
+.refresh--btn,
+.icon {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+
+body{
+background-color:'grey'
+}
+
+.align-center{
+display:flex;
+align-items: center;
+ justify-content: center;
+}
+
+
+.fieldsetclass{
+  border: 1px;
+  width: 50%;
+  display: flex;
+  align-items: center;
+ justify-content: center;
+}
+
+.icon--update {
+  width: 25px;
+  margin: 0 0 0 5rem;
+  justify-content: flex-end !important;
+}
+.icon--x {
+  width: 20px;
+  margin: 0 6rem 0 0;
+  justify-content: flex-start !important;
+}
+
+.spread {
+  justify-content: space-between !important;
+}
