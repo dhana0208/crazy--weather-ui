@@ -72,8 +72,7 @@ export default function CityTiles(props) {
 
  //Saves city names to our database
   function saveCities() {
-   console.log("*******************",cities);
-    const cityNames = cities?.filter(city => !city.cityId).map(city => city.name);
+     const cityNames = cities?.filter(city => !city.cityId).map(city => city.name);
     const payload = {
       cities: cityNames
     }
@@ -83,7 +82,6 @@ export default function CityTiles(props) {
           setSaveToast(true);
             const updatedCities = cities.map(city => {
               const responseCity = response.data.filter(it=>it.cityName===city.name);
-              console.log("&&&&",responseCity);
               if (responseCity.length) {
                 city.cityId = responseCity[0].cityId;
               }
