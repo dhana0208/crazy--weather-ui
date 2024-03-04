@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { createRef, useState } from "react";
 import axios from 'axios'
+import Stack from 'react-bootstrap/Stack';
 
 
 
@@ -14,7 +15,7 @@ export default function Signup() {
 
 
   const onSubmit = ev => {
-    ev.preventDefault()
+
 
 
     const payload = {
@@ -37,6 +38,7 @@ export default function Signup() {
             nameRef.current.value = '';
             emailRef.current.value = '';
             passwordRef.current.value = '';
+            passwordConfirmationRef.current.value='';
           } else {
 
             setMessage(data.message);
@@ -49,7 +51,7 @@ export default function Signup() {
   }
   return (
     <div className="login-signUp-form animated FadeInDown">
-      <div className="form">
+      <Stack gap={3}>
 
         <h1 className="title">Signup:</h1>
 
@@ -60,9 +62,9 @@ export default function Signup() {
         <input ref={passwordRef} type="password" placeholder="password" />
         <input ref={passwordConfirmationRef} type="password" placeholder="confirm password" />
         <button className="btn btn-block btn-primary md3" onClick={onSubmit}>signup</button>
-        <p className="message">Already registered? <Link to="/">sign in</Link></p>
+        <p className="message align-center">Already registered? <Link to="/">sign in</Link></p>
 
-      </div>
+      </Stack>
     </div>
 
   )

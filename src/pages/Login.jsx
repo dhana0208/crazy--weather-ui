@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,createRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { createRef } from "react";
 import axios from 'axios';
-
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
@@ -41,26 +39,14 @@ export default function Login() {
       })
       .catch((err) => {
         const response = err.response;
-        if (response && response.status === 422) {
           setMessage(response.data.message)
-        }
       })
 
 
   }
 
-
-
-
-
-
-
-
-
-
-
   return (
-     <fieldset>
+
      <Stack gap={3}>
         {message &&
           <div className="message">
@@ -70,11 +56,11 @@ export default function Login() {
 
         <h1>Login to your Crazy Weather App</h1>
         <div>
-          <label htmlFor="staticEmail2">Email</label>
+          <label htmlFor="staticEmail2">Email:</label>
           <input ref={emailRef} type="text" className="form-control" placeholder="Email" />
         </div>
         <div>
-          <label htmlFor="inputPassword2">Password</label>
+          <label htmlFor="inputPassword2">Password:</label>
           <input ref={passwordRef} type="password" className="form-control" placeholder="password" />
         </div>
         <div className="text-center">
@@ -85,7 +71,7 @@ export default function Login() {
         </div>
 
       </Stack>
-          </fieldset>
+
     
   )
 

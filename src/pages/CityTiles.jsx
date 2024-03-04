@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 
 import Row from 'react-bootstrap/Row';
+import Toast from 'react-bootstrap/Toast';
 import Button from 'react-bootstrap/Button';
 import x from '../assets/x.svg';
 import update from '../assets/refresh.svg';
@@ -16,10 +17,14 @@ export default function CityTiles(props) {
   const { location, userId } = props;
   const [cities, setCities] = useState([]);
   const [message, setMessage] = useState("");
+  const [saveToast, setSaveToast] = useState(false);
+  const [deleteToast, setDeleteToast] = useState(false);
   const WEATHER = '6e2be62a9f1a155511be452f1503f94e';
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${WEATHER}&units=imperial`;
 
-
+ /*
+ Gets data from our api for all saved cities and then get data from openweather api for latest weather
+ */
   useEffect(() => {
     axios.get(`http://localhost:8090/users/${userId}/cities`)
       .then(({ data }) => {
@@ -47,7 +52,7 @@ export default function CityTiles(props) {
   useEffect(() => {
     if (location === '') {
       console.log('no location');
-    } else if (cities.filter(it => it.name.toLowercase() === location.toLowercase()).length) {
+    } else if (cities.filter(it => it.name.toLowerCase() === location.toLowerCase()).length) {
       setMessage('same  location exists');
     }
     else {
@@ -58,24 +63,36 @@ export default function CityTiles(props) {
           setCities([...cities, response.data]);
         })
         .catch((error) => {
-        console.log("herere")
+          console.log("herere")
           setMessage(`Error, can't get ${location}'s weather!, Please provide a correct(full) name`);
         });
     }
   }, [props]);
 
 
-
+ //Saves city names to our database
   function saveCities() {
+   console.log("*******************",cities);
     const cityNames = cities?.filter(city => !city.cityId).map(city => city.name);
     const payload = {
-      userId,
       cities: cityNames
     }
     axios.post(`http://localhost:8090/users/${userId}/cities`, payload)
-      .then(({ data }) => {
-        if (data.status) {
-          console.log("data")
+      .then((response) => {
+        if (response.status === 200) {
+          setSaveToast(true);
+            const updatedCities = cities.map(city => {
+              const responseCity = response.data.filter(it=>it.cityName===city.name);
+              console.log("&&&&",responseCity);
+              if (responseCity.length) {
+                city.cityId = responseCity[0].cityId;
+              }
+              console.log(city,city.cityId)
+              return city;
+            });
+                      
+         setCities(updatedCities);
+
         }
 
       })
@@ -95,14 +112,14 @@ export default function CityTiles(props) {
     const tiles = cities.map((cityprops) => {
       return <CityCard key={cityprops.id} city={cityprops} />;
     });
-    console.log(message)
+
     return (
       <>
-           {message &&
-                <div>
-                  <p>{message}</p>
-                </div>
-              }
+        {message &&
+          <div>
+            <p>{message}</p>
+          </div>
+        }
 
         <Row
           xs="auto"
@@ -112,16 +129,16 @@ export default function CityTiles(props) {
         >
           {tiles}
         </Row>
-        <br/>
-         <div className="align-center">
+        <br />
+        <div className="align-center">
           <Button onClick={saveCities}>Save</Button>
-          </div>
+        </div>
 
       </>
     );
   }
 
-  //get new weather data from weather API then udpate data for city ID in mock API
+  //get new weather data from weather API 
   function UpdateCity(id, city) {
     console.log(`refresh weather data for ${city}...`);
 
@@ -130,7 +147,6 @@ export default function CityTiles(props) {
     axios
       .get(updateURL)
       .then((response) => {
-        console.log(response.data);
         setCities((current) =>
           current.map((obj) => {
             if (obj.id === id) {
@@ -147,13 +163,14 @@ export default function CityTiles(props) {
     return cities;
   }
 
-  //Deletes entry from weather state array, deletes element from DOM
+  //Deletes entry from database
   function DeleteCity(city) {
     if (city.cityId) {
       //delete from db
       axios.delete(`http://localhost:8090/cities/${city.cityId}`)
         .then(({ data }) => {
           console.log("deleted City")
+          setDeleteToast(true);
         });
     }
     const id = city.id;
@@ -250,5 +267,14 @@ export default function CityTiles(props) {
     );
   }
 
-  return <DashboardList />;
+  return (<div> <Toast onClose={() => setSaveToast(false)} show={saveToast} animation={true}>
+    <Toast.Header>
+      <strong className="me-auto">Save Toast</strong>
+    </Toast.Header>   <Toast.Body>Save Successful</Toast.Body>
+  </Toast><Toast onClose={() => setDeleteToast(false)} show={deleteToast} animation={true}>
+      <Toast.Header>
+        <strong className="me-auto">Delete Toast</strong>
+      </Toast.Header>
+      <Toast.Body>Delete Successful</Toast.Body>
+    </Toast> <DashboardList /></div>);
 }

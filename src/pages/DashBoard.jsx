@@ -6,9 +6,10 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
+
 import NavbarText from 'react-bootstrap/NavbarText'
 import Stack from 'react-bootstrap/Stack';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,Link } from "react-router-dom";
 
 
 export default function Dashboard() {
@@ -79,6 +80,7 @@ export default function Dashboard() {
       <Navbar data-bs-theme="dark" bg="dark"><Container>
       <NavbarBrand className="brand">Weather Dashboard</NavbarBrand>
       <NavbarText className="justify-content-end">Signed in as :{userName}</NavbarText>
+       <Link to="/">Logout</Link>
      </Container></Navbar>
 
       <SearchBar />
